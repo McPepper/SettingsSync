@@ -5,6 +5,8 @@
 ## Version: 0.1.0
 ## SavedVariables: SettingsSyncDB
 ## SavedVariablesPerCharacter: SettingsSyncCharDB
+## IconTexture: Interface\AddOns\SettingsSync\logo
+## X-Curse-Project-ID: 1450033
 
 SettingsSync.lua
 

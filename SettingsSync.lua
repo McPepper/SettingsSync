@@ -7,6 +7,7 @@ SettingsSyncDB = SettingsSyncDB or {
 	profiles = {},
 	debug = true,
 	latestVersion = 0,
+	currentProfile = "default",
 }
 
 SettingsSyncCharDB = SettingsSyncCharDB or {
@@ -27,8 +28,57 @@ end
 SettingsSync.Print = Print
 SettingsSync.Debug = Debug
 
+local function NormalizeProfileName(name)
+	if not name then
+		return nil
+	end
+	name = tostring(name)
+	name = name:gsub("^%s+", ""):gsub("%s+$", "")
+	if name == "" then
+		return nil
+	end
+	return name
+end
+
+local function GetCurrentProfileName()
+	local name = NormalizeProfileName(SettingsSyncDB.currentProfile)
+	if not name then
+		name = "default"
+		SettingsSyncDB.currentProfile = name
+	end
+	return name
+end
+
+local function SetCurrentProfileName(name)
+	local resolved = NormalizeProfileName(name)
+	if not resolved then
+		return nil
+	end
+	SettingsSyncDB.currentProfile = resolved
+	SettingsSyncDB.profiles[resolved] = SettingsSyncDB.profiles[resolved] or {}
+	return resolved
+end
+
+SettingsSync.GetCurrentProfileName = GetCurrentProfileName
+SettingsSync.SetCurrentProfileName = SetCurrentProfileName
+
+local function DeleteProfile(name)
+	local resolved = NormalizeProfileName(name) or GetCurrentProfileName()
+	if resolved == "default" then
+		Print("Cannot delete 'default'.")
+		return nil, resolved
+	end
+	SettingsSyncDB.profiles[resolved] = nil
+	if SettingsSyncDB.currentProfile == resolved then
+		SettingsSyncDB.currentProfile = "default"
+	end
+	return true, GetCurrentProfileName()
+end
+
+SettingsSync.DeleteProfile = DeleteProfile
+
 local function GetProfile()
-	local name = "default"
+	local name = GetCurrentProfileName()
 	SettingsSyncDB.profiles[name] = SettingsSyncDB.profiles[name] or {}
 	return SettingsSyncDB.profiles[name], name
 end
@@ -72,6 +122,8 @@ local function SaveProfile()
 	Print("Saved settings to profile '" .. resolvedName .. "'.")
 end
 
+SettingsSync.SaveProfile = SaveProfile
+
 local function ShowReloadPrompt()
 	if not StaticPopupDialogs["SETTINGSSYNC_RELOAD_UI"] then
 		StaticPopupDialogs["SETTINGSSYNC_RELOAD_UI"] = {
@@ -113,15 +165,29 @@ local function ApplyProfile(showReloadPrompt)
 	end
 end
 
+SettingsSync.ApplyProfile = ApplyProfile
+
 local function ResetProfile()
-	SettingsSyncDB.profiles["default"] = nil
-	Print("Reset 'default'.")
+	local name = GetCurrentProfileName()
+	SettingsSyncDB.profiles[name] = nil
+	Print("Reset '" .. name .. "'.")
+	if SettingsSyncDB.currentProfile == name then
+		SettingsSyncDB.currentProfile = "default"
+	end
+end
+
+local function ResetAllProfiles()
+	SettingsSyncDB.profiles = {}
+	SettingsSyncDB.currentProfile = "default"
+	Print("Reset all profiles.")
 end
 
 local function ShowHelp()
 	Print("Commands:")
 	Print("/ss - Open the SettingsSync menu")
 	Print("/settingssync - Open the SettingsSync menu")
+	Print("/ss reset - Reset the current profile")
+	Print("/ss resetall - Reset all profiles")
 	Print("/ss help - Show this help")
 end
 
@@ -132,16 +198,12 @@ SlashCmdList["SETTINGSSYNC"] = function(msg)
 	local cmd = msg:match("^(%S*)") or ""
 	cmd = cmd:lower()
 
-	if cmd == "save" then
-		SaveProfile()
-	elseif cmd == "apply" then
-		ApplyProfile()
-	elseif cmd == "menu" then
+	if cmd == "" then
 		Menu()
 	elseif cmd == "reset" then
 		ResetProfile()
-	elseif cmd == "" then
-		Menu()
+	elseif cmd == "resetall" then
+		ResetAllProfiles()
 	elseif cmd == "help" then
 		ShowHelp()
 	else
@@ -150,7 +212,8 @@ SlashCmdList["SETTINGSSYNC"] = function(msg)
 end
 
 local function ApplyDefaultOnLoad()
-	local profile = SettingsSyncDB.profiles and SettingsSyncDB.profiles["default"]
+	local name = GetCurrentProfileName()
+	local profile = SettingsSyncDB.profiles and SettingsSyncDB.profiles[name]
 	if profile then
 		ApplyProfile(false)
 	end
