@@ -67,7 +67,7 @@ local function CreateMenuFrame()
 
 	local cancelButton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 	cancelButton:SetSize(80, 24)
-	cancelButton:SetPoint("BOTTOMRIGHT", 20, 20)
+	cancelButton:SetPoint("BOTTOMRIGHT", -20, 20)
 	cancelButton:SetText("Cancel")
 	cancelButton:SetScript("OnClick", function()
 		input:SetText(state.defaults.inputText)
@@ -77,7 +77,7 @@ local function CreateMenuFrame()
 
 	local saveButton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 	saveButton:SetSize(80, 24)
-	saveButton:SetPoint("LEFT", cancelButton, "RIGHT", 10, 0)
+	saveButton:SetPoint("RIGHT", cancelButton, "LEFT", -10, 0)
 	saveButton:SetText("Save")
 
 	SettingsSync.Menu.Frame = frame
