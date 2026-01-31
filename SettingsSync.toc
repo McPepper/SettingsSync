@@ -2,7 +2,7 @@
 ## Title: SettingsSync
 ## Notes: Save settings from one character and apply to others.
 ## Author: Mosh
-## Version: 0.0.1
+## Version: 0.1.0
 ## SavedVariables: SettingsSyncDB
 ## SavedVariablesPerCharacter: SettingsSyncCharDB
 
