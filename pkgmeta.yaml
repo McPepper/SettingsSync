@@ -1,0 +1,28 @@
+package-as: SettingsSync
+
+# If you don't vendor libs, this prevents CurseForge/WowAce packager from trying to do nolib variants.
+enable-nolib-creation: no
+
+# Exclude dev-only stuff from the zip
+ignore:
+  - .gitignore
+  - .gitattributes
+  - README.md
+  - CHANGELOG.md
+  - docs
+  - docs/**
+  - scripts
+  - scripts/**
+  - .github
+  - .github/**
+  - .vscode
+  - .vscode/**
+  - "*.psd"
+  - "*.aseprite"
+
+# Optional: include license file in the final zip under a predictable name
+license-output: LICENSE.txt
+
+# Optional: if you maintain a changelog file, you can ship it as the release notes source
+# (remove this if you don't have one)
+manual-changelog: CHANGELOG.md
