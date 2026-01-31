@@ -1,0 +1,21 @@
+## Interface: 120001, 120000
+## Title: SettingsSync
+## Notes: Save settings from one character and apply to others.
+## Author: Mosh
+## Version: 0.0.1
+## SavedVariables: SettingsSyncDB
+## SavedVariablesPerCharacter: SettingsSyncCharDB
+
+SettingsSync.lua
+
+## modules
+src/modules/chat.lua
+src/modules/actionbars.lua
+src/modules/cvars.lua
+src/modules/editmode.lua
+
+##ui
+src/ui/menu.lua
+
+## utilities
+src/utils/stringify.lua
