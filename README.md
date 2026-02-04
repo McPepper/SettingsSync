@@ -14,7 +14,13 @@ SettingsSync is a lightweight World of Warcraft addon that lets you apply your p
 
 *   **ActionBars**: Save and apply multi-action bar visibility toggles.
 *   **Chat**: Save and apply chat window names, docking/lock/interactable states, colors, font size, message groups, and channels.
-*   **CVars**: Save and apply selected CVars (currently: `autoLootDefault`).
+*   **CVars**: Save and apply selected CVars:
+	*   `autoLootDefault` — Auto loot enabled by default.
+	*   `cooldownViewerEnabled` — Cooldown viewer visibility.
+	*   `damageMeterEnabled` — Damage meter visibility.
+	*   `floatingCombatTextCombatDamage_v2` — Floating combat text for damage.
+	*   `floatingCombatTextCombatHealing_v2` — Floating combat text for healing.
+	*   `floatingCombatTextCombatLogPeriodicSpells_v2` — Floating combat text for periodic spells (DoTs/HoTs).
 *   **EditMode**: Save and apply the active edit mode layout (preset or custom by name).
 
 ## Profiles Support
