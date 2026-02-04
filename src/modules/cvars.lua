@@ -13,6 +13,11 @@ end
 
 local CVARS_TO_SYNC = {
 	"autoLootDefault",
+	"cooldownViewerEnabled",
+	"damageMeterEnabled",
+	"floatingCombatTextCombatDamage_v2", -- New CVar for floating combat text ( damage )
+	"floatingCombatTextCombatHealing_v2", -- New CVar for floating combat text ( heals )
+	"floatingCombatTextCombatLogPeriodicSpells_v2", -- New CVar for floating combat text ( periodic spells, dots )
 }
 
 local function SaveCVars()

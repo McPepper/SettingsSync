@@ -15,6 +15,7 @@ src/modules/chat.lua
 src/modules/actionbars.lua
 src/modules/cvars.lua
 src/modules/editmode.lua
+src/modules/combatEnhancements.lua
 
 ##ui
 src/ui/menu.lua

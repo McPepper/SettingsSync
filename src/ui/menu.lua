@@ -152,10 +152,18 @@ local function CreateMenuFrame()
 		if SettingsSync.SetCurrentProfileName then
 			local resolved = SettingsSync.SetCurrentProfileName(text)
 			if resolved then
-				currentProfileValue:SetText(resolved)
+				frame.CurrentProfileValue:SetText(resolved)
 				input:SetText("")
 				state.current.inputText = ""
 				RefreshProfileDropdown()
+
+				if SettingsSync.Print then
+					SettingsSync.Print("Created and switched to profile: " .. resolved)
+				end
+
+				if SettingsSync.SaveProfile then
+					SettingsSync.SaveProfile()
+				end
 			end
 		end
 	end)

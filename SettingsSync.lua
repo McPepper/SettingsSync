@@ -117,6 +117,10 @@ local function SaveProfile()
 		profile.editMode = SettingsSync.EditMode.Save()
 	end
 
+	if SettingsSync.CombatEnhancements and SettingsSync.CombatEnhancements.Save then
+		profile.combatEnhancements = SettingsSync.CombatEnhancements.Save()
+	end
+
 	SettingsSyncDB.latestVersion = (SettingsSyncDB.latestVersion or 0) + 1
 
 	Print("Saved settings to profile '" .. resolvedName .. "'.")
@@ -156,6 +160,9 @@ local function ApplyProfile(showReloadPrompt)
 	end
 	if SettingsSync.EditMode and SettingsSync.EditMode.Apply then
 		SettingsSync.EditMode.Apply(profile.editMode)
+	end
+	if SettingsSync.CombatEnhancements and SettingsSync.CombatEnhancements.Apply then
+		SettingsSync.CombatEnhancements.Apply(profile.combatEnhancements)
 	end
 
 	Print("Applied settings from profile '" .. resolvedName .. "'.")

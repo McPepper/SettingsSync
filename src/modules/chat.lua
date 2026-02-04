@@ -25,7 +25,19 @@ local function SaveChat()
 
 		if name ~= nil then
 			local groups = { GetChatWindowMessages(i) }
-			local channels = { GetChatWindowChannels(i) }
+			local rawChannels = { GetChatWindowChannels(i) }
+			local channels = {}
+
+			for index = 1, #rawChannels, 2 do
+				local channelName = rawChannels[index]
+				local zoneChannel = rawChannels[index + 1]
+				if channelName then
+					channels[#channels + 1] = {
+						name = channelName,
+						zone = zoneChannel,
+					}
+				end
+			end
 
 			chat.windows[i] = {
 				name = name or "",
@@ -44,7 +56,6 @@ local function SaveChat()
 		end
 	end
 
-	--Print("Saved " .. tostring(NUM_CHAT_WINDOWS) .. " chat windows.")
 	return chat
 end
 
@@ -115,10 +126,38 @@ local function ApplyChat(chat)
 			end
 
 			-- Channels
-			if frame and window.channels and ChatFrame_RemoveAllChannels and ChatFrame_AddChannel then
+			if frame and window.channels and ChatFrame_RemoveAllChannels then
 				ChatFrame_RemoveAllChannels(frame)
+				local useRegister = not frame.AddChannel
+				local registerArgs = useRegister and {} or nil
+
 				for _, channel in ipairs(window.channels) do
-					ChatFrame_AddChannel(frame, channel)
+					local channelName = nil
+					local zoneChannel = nil
+					if type(channel) == "table" then
+						channelName = channel.name or channel[1]
+						zoneChannel = channel.zone or channel[2]
+					else
+						channelName = channel
+						zoneChannel = 0
+					end
+
+					if channelName and channelName ~= "" then
+						if frame.AddChannel then
+							frame:AddChannel(channelName)
+						elseif registerArgs then
+							registerArgs[#registerArgs + 1] = channelName
+							registerArgs[#registerArgs + 1] = zoneChannel or 0
+						end
+					end
+				end
+
+				if registerArgs and #registerArgs > 0 then
+					if frame.RegisterForChannels then
+						frame:RegisterForChannels(unpack(registerArgs))
+					elseif ChatFrame_RegisterForChannels then
+						ChatFrame_RegisterForChannels(frame, unpack(registerArgs))
+					end
 				end
 			end
 		end

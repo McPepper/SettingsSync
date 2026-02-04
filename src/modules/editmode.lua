@@ -24,8 +24,6 @@ local function SaveEditModeLayout()
 	local layouts = layoutInfo.layouts
 	local activeLayout = layoutInfo.activeLayout
 
-	Debug("Current active edit mode layout ID: " .. tostring(activeLayout))
-
 	local presets = 2
 
 	local layoutName
